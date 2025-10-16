@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MME - Metallurgical & Materials Engineering</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        :root {
+            --primary: #0a0f1c;
+            --secondary: #2563eb;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --glass: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glow: 0 0 25px rgba(37, 99, 235, 0.3);
+            --sidebar-width: 280px;
+        }
+
+        body {
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(245, 158, 11, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #0a0f1c 0%, #111827 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            grid-template-rows: auto 1fr;
+            height: 100vh;
+            gap: 0;
+        }
+
+        /* Premium Sidebar */
+        .sidebar {
+            grid-column: 1;
+            grid-row: 1 / -1;
+            background: rgba(10, 15, 28, 0.95);
+            backdrop-filter: blur(40px);
+            border-right: 1px solid var(--glass-border);
+            padding: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-section {
+            padding: 30px 25px;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, transparent 100%);
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+            letter-spacing: -1px;
+        }
+
+        .department {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-section {
+            flex: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        .nav-section::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .nav-section::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-section::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 25px;
+            margin: 6px 15px;
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .nav-item:hover::before {
+            left: 100%;
+        }
+
+        .nav-item:hover {
+            background: rgba(37, 99, 235, 0.15);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            background: rgba(37, 99, 235, 0.25);
+            transform: translateX(5px);
+            box-shadow: var(--glow);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-right: 15px;
+            width: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover .nav-icon {
+            transform: scale(1.2);
+            color: #60a5fa;
+        }
+
+        .nav-text {
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: -0.2px;
+        }
+
+        /* Header */
+        .header {
+            grid-column: 2;
+            grid-row: 1;
+            background: rgba(10, 15, 28, 0.8);
+            backdrop-filter: blur(40px);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .page-title {
+            font-size: 2.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            padding: 12px 20px;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .user-profile:hover {
+            transform: scale(1.05);
+            box-shadow: var(--glow);
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid var(--secondary);
+        }
+
+        .user-info h3 {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .user-info p {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main-content {
+            grid-column: 2;
+            grid-row: 2;
+            padding: 30px;
+            overflow-y: auto;
+            display: grid;
+            grid-template-rows: auto auto 1fr;
+            gap: 25px;
+            max-height: calc(100vh - 100px);
+        }
+
+        .main-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .main-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .main-content::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 3px;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 20px 25px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            border-left: 4px solid var(--warning);
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            animation: pulse 3s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); }
+            50% { box-shadow: 0 4px 20px rgba(245, 158, 11, 0.2); }
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: var(--warning);
+        }
+
+        .alert-content {
+            font-weight: 500;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stat-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: -0.2px;
+        }
+
+        .stat-icon {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            background: rgba(37, 99, 235, 0.15);
+            padding: 10px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: rotate(10deg);
+        }
+
+        .stat-value {
+            font-size: 2.4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+
+        .stat-progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            border-radius: 4px;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .stat-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .status-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Content Sections Container */
+        .content-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            height: 100%;
+            max-height: 500px;
+        }
+
+        .content-column {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            overflow-y: auto;
+        }
+
+        .content-column::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .content-column::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .content-column::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            letter-spacing: -0.3px;
+        }
+
+        .section-link {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .section-link:hover {
+            transform: translateX(3px);
+        }
+
+        /* Exam Grid */
+        .exam-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .exam-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 18px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .exam-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .exam-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.2px;
+        }
+
+        .exam-detail {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .exam-date {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 10px;
+            font-size: 0.8rem;
+        }
+
+        /* Profile Section */
+        .profile-display {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-right: 20px;
+            border: 3px solid var(--secondary);
+        }
+
+        .profile-info h2 {
+            font-size: 1.6rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #fff 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-info p {
+            color: #cbd5e1;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .profile-stat {
+            text-align: center;
+            transition: all 0.3s ease;
+            padding: 15px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .profile-stat:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #fff 0%, #60a5fa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            font-weight: 600;
+        }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 14px 16px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: -0.1px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .data-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .content-sections {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto 1fr;
+            }
+            
+            .sidebar {
+                grid-column: 1;
+                grid-row: 1;
+                height: auto;
+            }
+            
+            .header {
+                grid-column: 1;
+                grid-row: 2;
+            }
+            
+            .main-content {
+                grid-column: 1;
+                grid-row: 3;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Premium Sidebar -->
+        <div class="sidebar">
+            <div class="logo-section">
+                <div class="logo">MME</div>
+                <div class="department">Metallurgical & Materials Engineering</div>
+                <div class="department">RGUKT RK Valley</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-item active">
+                    <i class="fas fa-tachometer-alt nav-icon"></i>
+                    <span class="nav-text">Dashboard</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-user-circle nav-icon"></i>
+                    <span class="nav-text">Profile</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-clipboard-list nav-icon"></i>
+                    <span class="nav-text">Sem Registration</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-calendar-check nav-icon"></i>
+                    <span class="nav-text">Attendance</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-chart-line nav-icon"></i>
+                    <span class="nav-text">Results</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-file-alt nav-icon"></i>
+                    <span class="nav-text">Tests</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-flask nav-icon"></i>
+                    <span class="nav-text">Laboratory</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-industry nav-icon"></i>
+                    <span class="nav-text">Internships</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-hard-hat nav-icon"></i>
+                    <span class="nav-text">Workshop</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-book nav-icon"></i>
+                    <span class="nav-text">Research</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-cog nav-icon"></i>
+                    <span class="nav-text">Settings</span>
+                </div>
+                <div class="nav-item">
+                    <i class="fas fa-sign-out-alt nav-icon"></i>
+                    <span class="nav-text">Logout</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1 class="page-title">Engineering Dashboard</h1>
+            <div class="user-profile">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Sarah Chen" class="user-avatar">
+                <div class="user-info">
+                    <h3>Sarah Chen</h3>
+                    <p>Metallurgical Engineering • 4th Year</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Alert -->
+            <div class="alert">
+                <i class="fas fa-exclamation-triangle alert-icon"></i>
+                <div class="alert-content">Profile editing is currently disabled by administration. Contact department office for assistance.</div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Semester Registration</h3>
+                        <i class="fas fa-clipboard-list stat-icon"></i>
+                    </div>
+                    <div class="stat-value">Completed</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                    <div class="stat-footer">
+                        <span class="status-badge status-success">Approved</span>
+                        <button class="btn btn-primary">View Details</button>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Materials Lab</h3>
+                        <i class="fas fa-flask stat-icon"></i>
+                    </div>
+                    <div class="stat-value">12/15</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 80%"></div>
+                    </div>
+                    <div class="stat-footer">
+                        <span class="status-badge status-warning">In Progress</span>
+                        <button class="btn btn-primary">View Schedule</button>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3 class="stat-title">CGPA</h3>
+                        <i class="fas fa-chart-line stat-icon"></i>
+                    </div>
+                    <div class="stat-value">8.94</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 89.4%"></div>
+                    </div>
+                    <div class="stat-footer">
+                        <span class="status-badge status-success">Excellent</span>
+                        <button class="btn btn-primary">View Results</button>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Research Paper</h3>
+                        <i class="fas fa-book stat-icon"></i>
+                    </div>
+                    <div class="stat-value">Under Review</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 70%"></div>
+                    </div>
+                    <div class="stat-footer">
+                        <span class="status-badge status-warning">Reviewing</span>
+                        <button class="btn btn-primary">Check Status</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Sections -->
+            <div class="content-sections">
+                <!-- Left Column -->
+                <div class="content-column">
+                    <!-- Exam Section -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Upcoming Exams</h2>
+                            <a href="#" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <div class="exam-grid">
+                            <div class="exam-card">
+                                <h3 class="exam-title">Materials Science Midterm</h3>
+                                <p class="exam-detail">Course: MME 301</p>
+                                <p class="exam-detail">Type: Written Exam</p>
+                                <p class="exam-detail">Duration: 2 hours</p>
+                                <div class="exam-date">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>25 Oct 2025, 10:00 AM</span>
+                                </div>
+                            </div>
+                            <div class="exam-card">
+                                <h3 class="exam-title">Metallurgy Lab Test</h3>
+                                <p class="exam-detail">Course: MME 352</p>
+                                <p class="exam-detail">Type: Practical Exam</p>
+                                <p class="exam-detail">Duration: 3 hours</p>
+                                <div class="exam-date">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>28 Oct 2025, 2:00 PM</span>
+                                </div>
+                            </div>
+                            <div class="exam-card">
+                                <h3 class="exam-title">Thermodynamics Quiz</h3>
+                                <p class="exam-detail">Course: MME 410</p>
+                                <p class="exam-detail">Type: Online Quiz</p>
+                                <p class="exam-detail">Duration: 45 minutes</p>
+                                <div class="exam-date">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <span>02 Nov 2025, 11:30 AM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profile Section -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Student Profile</h2>
+                            <a href="#" class="section-link">Edit <i class="fas fa-edit"></i></a>
+                        </div>
+                        <div class="profile-display">
+                            <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=100&q=80" alt="Sarah Chen" class="profile-avatar">
+                            <div class="profile-info">
+                                <h2>Sarah Chen</h2>
+                                <p>Metallurgical & Materials Engineering</p>
+                                <p>Student ID: MME20200045</p>
+                                <p>Email: sarah.chen@mme.uat.edu</p>
+                            </div>
+                        </div>
+                        <div class="profile-stats">
+                            <div class="profile-stat">
+                                <div class="stat-number">4th</div>
+                                <div class="stat-label">Year</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="stat-number">A</div>
+                                <div class="stat-label">Section</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="stat-number">2020</div>
+                                <div class="stat-label">Batch</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="stat-number">3.8</div>
+                                <div class="stat-label">GPA</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="content-column">
+                    <!-- Activities Section -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Recent Activities</h2>
+                            <a href="#" class="section-link">View All <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Activity</th>
+                                    <th>Course</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>15 Oct 2025</td>
+                                    <td>Phase Diagrams Lab</td>
+                                    <td>MME 452</td>
+                                    <td><span class="status-badge status-success">Completed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>12 Oct 2025</td>
+                                    <td>Materials Characterization</td>
+                                    <td>MME 410</td>
+                                    <td><span class="status-badge status-success">Graded</span></td>
+                                </tr>
+                                <tr>
+                                    <td>10 Oct 2025</td>
+                                    <td>Research Paper Submission</td>
+                                    <td>MME 499</td>
+                                    <td><span class="status-badge status-warning">Under Review</span></td>
+                                </tr>
+                                <tr>
+                                    <td>05 Oct 2025</td>
+                                    <td>Extractive Metallurgy Quiz</td>
+                                    <td>MME 335</td>
+                                    <td><span class="status-badge status-success">Scored 92%</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Events Section -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <h2 class="section-title">Department Events</h2>
+                            <a href="#" class="section-link">Calendar <i class="fas fa-calendar-alt"></i></a>
+                        </div>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Event</th>
+                                    <th>Location</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>22 Oct 2025</td>
+                                    <td>Advanced Materials Conference</td>
+                                    <td>Department Auditorium</td>
+                                    <td><span class="status-badge status-warning">Registered</span></td>
+                                </tr>
+                                <tr>
+                                    <td>28 Oct 2025</td>
+                                    <td>Steel Plant Visit</td>
+                                    <td>National Steel Corp.</td>
+                                    <td><span class="status-badge status-warning">Confirmed</span></td>
+                                </tr>
+                                <tr>
+                                    <td>05 Nov 2025</td>
+                                    <td>Metallography Workshop</td>
+                                    <td>Materials Lab 3B</td>
+                                    <td><span class="status-badge status-warning">Upcoming</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize animations
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate progress bars on load
+            document.querySelectorAll('.progress-bar').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 500);
+            });
+            
+            // Navigation interaction
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.nav-item').forEach(nav => {
+                        nav.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

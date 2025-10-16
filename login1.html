@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Improved 3D Registration Form - RGUKT RKV MME</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --primary: #1a237e;
+            --primary-light: #534bae;
+            --primary-dark: #000051;
+            --secondary: #ff6f00;
+            --secondary-light: #ff9e40;
+            --secondary-dark: #c43e00;
+            --accent: #00b0ff;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --text-white: #ffffff;
+            --bg-light: #f5f5f5;
+            --bg-white: #ffffff;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --shadow-heavy: 0 10px 40px rgba(0, 0, 0, 0.15);
+            --radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== IMPROVED 3D BACKGROUND ===== */
+        .background-3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .floating-cubes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .cube {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            opacity: 0.1;
+            animation: floatCube 25s infinite linear;
+        }
+
+        .cube:nth-child(1) {
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .cube:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .cube:nth-child(3) {
+            bottom: 10%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        .cube:nth-child(4) {
+            top: 30%;
+            right: 20%;
+            animation-delay: -15s;
+        }
+
+        @keyframes floatCube {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+            }
+            100% {
+                transform: translateY(0) rotate(360deg);
+            }
+        }
+
+        /* ===== SIMPLIFIED PARTICLE BACKGROUND ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: floatParticle 20s infinite linear;
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0);
+            }
+            100% {
+                transform: translateY(-100px) translateX(100px);
+            }
+        }
+
+        /* ===== HEADER STYLES ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.8rem;
+            box-shadow: var(--shadow);
+        }
+
+        .header-text h1 {
+            font-size: 2.2rem;
+            color: var(--text-white);
+            margin-bottom: 5px;
+        }
+
+        .header-text p {
+            font-size: 1rem;
+            color: var(--text-white);
+            opacity: 0.8;
+        }
+
+        /* ===== IMPROVED FORM CONTAINER ===== */
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-heavy);
+            padding: 30px;
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 1s ease-out;
+            transition: transform 0.3s ease;
+        }
+
+        .form-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .form-title {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-title h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+
+        .form-title p {
+            color: var(--text-light);
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        /* ===== IMPROVED FORM STYLES ===== */
+        .registration-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        .form-section.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        .required::after {
+            content: ' *';
+            color: var(--error);
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--bg-white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        /* ===== IMPROVED RADIO GROUP ===== */
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-input {
+            display: none;
+        }
+
+        .radio-label {
+            position: relative;
+            padding-left: 28px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-dark);
+        }
+
+        .radio-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .radio-input:checked + .radio-label::before {
+            border-color: var(--primary);
+        }
+
+        .radio-input:checked + .radio-label::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* ===== IMPROVED VALIDATION STYLES ===== */
+        .warning-message {
+            color: var(--error);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .input-error {
+            border-color: var(--error) !important;
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1) !important;
+        }
+
+        .input-success {
+            border-color: var(--success) !important;
+        }
+
+        .hint-text {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+
+        /* ===== IMPROVED PASSWORD STRENGTH ===== */
+        .password-strength {
+            margin-top: 8px;
+        }
+
+        .strength-meter {
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 5px;
+        }
+
+        .strength-level {
+            height: 100%;
+            width: 0;
+            transition: var(--transition);
+            border-radius: 3px;
+        }
+
+        .strength-text {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* ===== IMPROVED BUTTON STYLES ===== */
+        .form-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 35px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--text-white);
+            box-shadow: 0 4px 15px rgba(26, 35, 126, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26, 35, 126, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* ===== IMPROVED PROGRESS BAR ===== */
+        .progress-container {
+            grid-column: 1 / -1;
+            margin-bottom: 25px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0;
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* ===== STEP INDICATOR ===== */
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #eee;
+            z-index: 1;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 5px;
+            transition: var(--transition);
+        }
+
+        .step.active .step-number {
+            background: var(--primary);
+            color: white;
+        }
+
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .step.active .step-label {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        /* ===== FORM STEPS ===== */
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* ===== NAVIGATION BUTTONS ===== */
+        .form-navigation {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--text-white);
+            font-size: 0.85rem;
+            opacity: 0.7;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* ===== RESPONSIVE STYLES ===== */
+        @media (max-width: 768px) {
+            .registration-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 25px 20px;
+            }
+            
+            .header-text h1 {
+                font-size: 1.8rem;
+            }
+            
+            .form-title h2 {
+                font-size: 1.5rem;
+            }
+            
+            .step-indicator {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .radio-group {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .header-text h1 {
+                font-size: 1.6rem;
+            }
+            
+            .logo {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+            
+            .form-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .form-navigation .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Improved Background -->
+    <div class="background-3d">
+        <div class="floating-cubes">
+            <div class="cube" style="background: var(--primary);"></div>
+            <div class="cube" style="background: var(--secondary);"></div>
+            <div class="cube" style="background: var(--accent);"></div>
+            <div class="cube" style="background: var(--primary-light);"></div>
+        </div>
+    </div>
+
+    <!-- Particle Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-container">
+            <div class="logo">MME</div>
+            <div class="header-text">
+                <h1>RGUKT RKV - MME Department</h1>
+                <p>Student Registration Portal</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+        <div class="form-title">
+            <h2>Student Registration Form</h2>
+            <p>Complete your registration in simple steps</p>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <div class="step active" data-step="1">
+                <div class="step-number">1</div>
+                <div class="step-label">Personal</div>
+            </div>
+            <div class="step" data-step="2">
+                <div class="step-number">2</div>
+                <div class="step-label">Academic</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-number">3</div>
+                <div class="step-label">Security</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-number">4</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="formProgress"></div>
+            </div>
+            <div class="progress-text">
+                <span>Form Progress</span>
+                <span id="progressPercentage">0%</span>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <form class="registration-form" name="login_form" action="rkv.html" onsubmit="return validateForm()">
+            <!-- Step 1: Personal Information -->
+            <div class="form-step active" id="step1">
+                <div class="form-section full-width">
+                    <h3 class="section-title">Personal Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="fullName" class="form-label required">Full Name</label>
+                        <div class="input-container">
+                            <input type="text" id="fullName" name="fullName" class="form-control" placeholder="Enter your full name as per SSC" required>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="hint-text">Please enter your name exactly as it appears on your SSC certificate</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" class="form-label required">Email Address</label>
+                        <div class="input-container">
+                            <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email" required>
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone" class="form-label required">Phone Number</label>
+                        <div class="input-container">
+                            <input type="tel" id="phone" name="phone" class="form-control" placeholder="Enter your phone number" required>
+                            <i class="fas fa-phone input-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <div></div> <!-- Empty div for spacing -->
+                    <button type="button" class="btn btn-primary next-step" data-next="2">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Academic Information -->
+            <div class="form-step" id="step2">
+                <div class="form-section full-width">
+                    <h3 class="section-title">Academic Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="idNumber" class="form-label required">ID Number</label>
+                        <div class="input-container">
+                            <input type="text" id="idNumber" name="idNumber" class="form-control" placeholder="Enter your college ID" required>
+                            <i class="fas fa-id-card input-icon"></i>
+                        </div>
+                        <div class="warning-message" id="idWarningMessage"></div>
+                        <div class="hint-text">ID must start with N, O, S, or R</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="branch" class="form-label required">Branch</label>
+                        <div class="input-container">
+                            <input type="text" id="branch" name="branch" class="form-control" placeholder="Enter your branch" required>
+                            <i class="fas fa-graduation-cap input-icon"></i>
+                        </div>
+                        <div class="warning-message" id="branchWarningMessage"></div>
+                        <div class="hint-text">Only MME (Metallurgical and Materials Engineering) students are allowed</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label required">Academic Year</label>
+                        <div class="radio-group">
+                            <div class="radio-item">
+                                <input type="radio" id="year1" name="academicYear" value="1" class="radio-input" required>
+                                <label for="year1" class="radio-label">1st Year</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="year2" name="academicYear" value="2" class="radio-input">
+                                <label for="year2" class="radio-label">2nd Year</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="year3" name="academicYear" value="3" class="radio-input">
+                                <label for="year3" class="radio-label">3rd Year</label>
+                            </div>
+                            <div class="radio-item">
+                                <input type="radio" id="year4" name="academicYear" value="4" class="radio-input">
+                                <label for="year4" class="radio-label">4th Year</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-outline prev-step" data-prev="1">Previous</button>
+                    <button type="button" class="btn btn-primary next-step" data-next="3">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Account Security -->
+            <div class="form-step" id="step3">
+                <div class="form-section full-width">
+                    <h3 class="section-title">Account Security</h3>
+                    
+                    <div class="form-group">
+                        <label for="password" class="form-label required">Password</label>
+                        <div class="input-container">
+                            <input type="password" id="password" name="password" class="form-control" placeholder="Create a strong password" required>
+                            <i class="fas fa-lock input-icon" id="passwordToggle"></i>
+                        </div>
+                        <div class="password-strength">
+                            <div class="strength-meter">
+                                <div class="strength-level" id="passwordStrength"></div>
+                            </div>
+                            <div class="strength-text" id="passwordStrengthText">Password strength: None</div>
+                        </div>
+                        <div class="hint-text">Use at least 8 characters with a mix of letters, numbers, and symbols</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label required">Confirm Password</label>
+                        <div class="input-container">
+                            <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" placeholder="Re-enter your password" required>
+                            <i class="fas fa-lock input-icon"></i>
+                        </div>
+                        <div class="warning-message" id="confirmPasswordWarning"></div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-outline prev-step" data-prev="2">Previous</button>
+                    <button type="button" class="btn btn-primary next-step" data-next="4">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Review and Submit -->
+            <div class="form-step" id="step4">
+                <div class="form-section full-width">
+                    <h3 class="section-title">Review Your Information</h3>
+                    
+                    <div class="review-section">
+                        <h4>Personal Details</h4>
+                        <div class="review-item">
+                            <strong>Full Name:</strong> <span id="reviewName">-</span>
+                        </div>
+                        <div class="review-item">
+                            <strong>Email:</strong> <span id="reviewEmail">-</span>
+                        </div>
+                        <div class="review-item">
+                            <strong>Phone:</strong> <span id="reviewPhone">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="review-section">
+                        <h4>Academic Details</h4>
+                        <div class="review-item">
+                            <strong>ID Number:</strong> <span id="reviewId">-</span>
+                        </div>
+                        <div class="review-item">
+                            <strong>Branch:</strong> <span id="reviewBranch">-</span>
+                        </div>
+                        <div class="review-item">
+                            <strong>Academic Year:</strong> <span id="reviewYear">-</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Terms and Conditions -->
+                    <div class="form-section full-width">
+                        <div class="form-group">
+                            <div class="radio-item">
+                                <input type="checkbox" id="terms" name="terms" class="radio-input" required>
+                                <label for="terms" class="radio-label">I agree to the <a href="#" style="color: var(--primary);">Terms and Conditions</a> and <a href="#" style="color: var(--primary);">Privacy Policy</a></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-outline prev-step" data-prev="3">Previous</button>
+                    <button type="submit" class="btn btn-primary">Submit Registration</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2023 RGUKT RKV - MME Department. All rights reserved.</p>
+    </div>
+
+    <script>
+        // DOM Elements
+        const form = document.querySelector('.registration-form');
+        const steps = document.querySelectorAll('.form-step');
+        const stepIndicators = document.querySelectorAll('.step');
+        const nextButtons = document.querySelectorAll('.next-step');
+        const prevButtons = document.querySelectorAll('.prev-step');
+        const branchInput = document.getElementById('branch');
+        const idInput = document.getElementById('idNumber');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const passwordToggle = document.getElementById('passwordToggle');
+        const progressBar = document.getElementById('formProgress');
+        const progressPercentage = document.getElementById('progressPercentage');
+        
+        // Review elements
+        const reviewName = document.getElementById('reviewName');
+        const reviewEmail = document.getElementById('reviewEmail');
+        const reviewPhone = document.getElementById('reviewPhone');
+        const reviewId = document.getElementById('reviewId');
+        const reviewBranch = document.getElementById('reviewBranch');
+        const reviewYear = document.getElementById('reviewYear');
+        
+        // Warning Messages
+        const branchWarning = document.getElementById('branchWarningMessage');
+        const idWarning = document.getElementById('idWarningMessage');
+        const confirmPasswordWarning = document.getElementById('confirmPasswordWarning');
+        
+        // Password Strength Elements
+        const passwordStrength = document.getElementById('passwordStrength');
+        const passwordStrengthText = document.getElementById('passwordStrengthText');
+
+        // Create floating particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 80; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            particle.style.left = `${Math.random() * 100}%`;
+            particle.style.animationDelay = `${Math.random() * 20}s`;
+            particle.style.animationDuration = `${Math.random() * 15 + 10}s`;
+            particlesContainer.appendChild(particle);
+        }
+
+        // Step Navigation
+        function goToStep(stepNumber) {
+            // Hide all steps
+            steps.forEach(step => {
+                step.classList.remove('active');
+            });
+            
+            // Show current step
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+            
+            // Update step indicators
+            stepIndicators.forEach(step => {
+                step.classList.remove('active');
+                if (parseInt(step.dataset.step) < stepNumber) {
+                    step.classList.add('completed');
+                } else if (parseInt(step.dataset.step) === stepNumber) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('completed');
+                }
+            });
+            
+            // Update progress
+            updateFormProgress();
+        }
+
+        // Next button event listeners
+        nextButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const currentStep = parseInt(this.closest('.form-step').id.replace('step', ''));
+                const nextStep = parseInt(this.dataset.next);
+                
+                // Validate current step before proceeding
+                if (validateStep(currentStep)) {
+                    goToStep(nextStep);
+                    
+                    // If going to review step, update review information
+                    if (nextStep === 4) {
+                        updateReviewInfo();
+                    }
+                }
+            });
+        });
+
+        // Previous button event listeners
+        prevButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const prevStep = parseInt(this.dataset.prev);
+                goToStep(prevStep);
+            });
+        });
+
+        // Step Validation
+        function validateStep(stepNumber) {
+            let isValid = true;
+            
+            switch(stepNumber) {
+                case 1:
+                    // Validate personal information
+                    const nameInput = document.getElementById('fullName');
+                    const emailInput = document.getElementById('email');
+                    const phoneInput = document.getElementById('phone');
+                    
+                    if (!nameInput.value.trim()) {
+                        showError(nameInput);
+                        isValid = false;
+                    } else {
+                        showSuccess(nameInput);
+                    }
+                    
+                    if (!emailInput.value.trim() || !isValidEmail(emailInput.value)) {
+                        showError(emailInput);
+                        isValid = false;
+                    } else {
+                        showSuccess(emailInput);
+                    }
+                    
+                    if (!phoneInput.value.trim() || !isValidPhone(phoneInput.value)) {
+                        showError(phoneInput);
+                        isValid = false;
+                    } else {
+                        showSuccess(phoneInput);
+                    }
+                    break;
+                    
+                case 2:
+                    // Validate academic information
+                    if (!validateId() || !validateBranch()) {
+                        isValid = false;
+                    }
+                    
+                    // Check if academic year is selected
+                    const academicYearSelected = document.querySelector('input[name="academicYear"]:checked');
+                    if (!academicYearSelected) {
+                        isValid = false;
+                        // Highlight all radio options
+                        document.querySelectorAll('.radio-label').forEach(label => {
+                            label.style.color = 'var(--error)';
+                        });
+                    } else {
+                        document.querySelectorAll('.radio-label').forEach(label => {
+                            label.style.color = '';
+                        });
+                    }
+                    break;
+                    
+                case 3:
+                    // Validate account security
+                    if (!validatePassword() || !validateConfirmPassword()) {
+                        isValid = false;
+                    }
+                    break;
+            }
+            
+            return isValid;
+        }
+
+        // Form Validation Functions
+        function validateForm() {
+            // Validate all steps
+            for (let i = 1; i <= 3; i++) {
+                if (!validateStep(i)) {
+                    // Go to the first invalid step
+                    goToStep(i);
+                    return false;
+                }
+            }
+            
+            // Check terms and conditions
+            const termsCheckbox = document.getElementById('terms');
+            if (!termsCheckbox.checked) {
+                alert('Please agree to the Terms and Conditions');
+                return false;
+            }
+            
+            return true;
+        }
+
+        function validateBranch() {
+            const branchValue = branchInput.value.trim().toLowerCase();
+            const allowedBranches = ['mme', 'metallurgical and materials engineering'];
+            
+            if (allowedBranches.includes(branchValue)) {
+                showSuccess(branchInput);
+                hideWarning(branchWarning);
+                return true;
+            } else {
+                showError(branchInput);
+                showWarning(branchWarning, 'Only MME (Metallurgical and Materials Engineering) students are allowed.');
+                return false;
+            }
+        }
+
+        function validateId() {
+            const idValue = idInput.value.trim().toLowerCase();
+            const validPrefixes = ['n', 'o', 's', 'r'];
+            
+            if (idValue.length > 0 && validPrefixes.includes(idValue.charAt(0))) {
+                showSuccess(idInput);
+                hideWarning(idWarning);
+                return true;
+            } else {
+                showError(idInput);
+                showWarning(idWarning, 'ID Number must start with N, O, S, or R.');
+                return false;
+            }
+        }
+
+        function validatePassword() {
+            const passwordValue = passwordInput.value;
+            
+            if (passwordValue.length >= 8) {
+                showSuccess(passwordInput);
+                return true;
+            } else {
+                showError(passwordInput);
+                return false;
+            }
+        }
+
+        function validateConfirmPassword() {
+            const passwordValue = passwordInput.value;
+            const confirmValue = confirmPasswordInput.value;
+            
+            if (confirmValue === passwordValue && confirmValue.length > 0) {
+                showSuccess(confirmPasswordInput);
+                hideWarning(confirmPasswordWarning);
+                return true;
+            } else {
+                showError(confirmPasswordInput);
+                showWarning(confirmPasswordWarning, 'Passwords do not match.');
+                return false;
+            }
+        }
+
+        // Helper Functions
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function isValidPhone(phone) {
+            const phoneRegex = /^[0-9]{10}$/;
+            return phoneRegex.test(phone.replace(/\D/g, ''));
+        }
+
+        function showError(input) {
+            input.classList.add('input-error');
+            input.classList.remove('input-success');
+        }
+
+        function showSuccess(input) {
+            input.classList.add('input-success');
+            input.classList.remove('input-error');
+        }
+
+        function showWarning(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function hideWarning(element) {
+            element.style.display = 'none';
+        }
+
+        // Update Review Information
+        function updateReviewInfo() {
+            reviewName.textContent = document.getElementById('fullName').value || '-';
+            reviewEmail.textContent = document.getElementById('email').value || '-';
+            reviewPhone.textContent = document.getElementById('phone').value || '-';
+            reviewId.textContent = document.getElementById('idNumber').value || '-';
+            reviewBranch.textContent = document.getElementById('branch').value || '-';
+            
+            const academicYear = document.querySelector('input[name="academicYear"]:checked');
+            reviewYear.textContent = academicYear ? `${academicYear.value} Year` : '-';
+        }
+
+        // Password Strength Calculator
+        function calculatePasswordStrength(password) {
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 25;
+            if (password.length >= 12) strength += 10;
+            
+            // Character variety checks
+            if (/[a-z]/.test(password)) strength += 15;
+            if (/[A-Z]/.test(password)) strength += 15;
+            if (/[0-9]/.test(password)) strength += 15;
+            if (/[^a-zA-Z0-9]/.test(password)) strength += 20;
+            
+            return Math.min(strength, 100);
+        }
+
+        function updatePasswordStrength() {
+            const password = passwordInput.value;
+            const strength = calculatePasswordStrength(password);
+            
+            passwordStrength.style.width = `${strength}%`;
+            
+            // Update color and text based on strength
+            if (strength < 40) {
+                passwordStrength.style.background = 'linear-gradient(90deg, #f44336, #ff9800)';
+                passwordStrengthText.textContent = 'Password strength: Weak';
+                passwordStrengthText.style.color = '#f44336';
+            } else if (strength < 70) {
+                passwordStrength.style.background = 'linear-gradient(90deg, #ff9800, #ffeb3b)';
+                passwordStrengthText.textContent = 'Password strength: Medium';
+                passwordStrengthText.style.color = '#ff9800';
+            } else {
+                passwordStrength.style.background = 'linear-gradient(90deg, #4caf50, #8bc34a)';
+                passwordStrengthText.textContent = 'Password strength: Strong';
+                passwordStrengthText.style.color = '#4caf50';
+            }
+            
+            // Update form progress
+            updateFormProgress();
+        }
+
+        // Password Visibility Toggle
+        function togglePasswordVisibility() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            passwordToggle.classList.toggle('fa-lock');
+            passwordToggle.classList.toggle('fa-lock-open');
+        }
+
+        // Form Progress Tracker
+        function updateFormProgress() {
+            const requiredFields = form.querySelectorAll('[required]');
+            let filledCount = 0;
+            
+            requiredFields.forEach(field => {
+                if (field.type === 'radio') {
+                    const radioGroup = form.querySelectorAll(`[name="${field.name}"]`);
+                    const isChecked = Array.from(radioGroup).some(radio => radio.checked);
+                    if (isChecked) filledCount++;
+                } else if (field.type === 'checkbox') {
+                    if (field.checked) filledCount++;
+                } else {
+                    if (field.value.trim() !== '') filledCount++;
+                }
+            });
+            
+            const progress = Math.round((filledCount / requiredFields.length) * 100);
+            progressBar.style.width = `${progress}%`;
+            progressPercentage.textContent = `${progress}%`;
+        }
+
+        // Event Listeners
+        branchInput.addEventListener('input', function() {
+            validateBranch();
+            updateFormProgress();
+        });
+        
+        idInput.addEventListener('input', function() {
+            validateId();
+            updateFormProgress();
+        });
+        
+        passwordInput.addEventListener('input', function() {
+            validatePassword();
+            updatePasswordStrength();
+            // Also validate confirm password when password changes
+            if (confirmPasswordInput.value) {
+                validateConfirmPassword();
+            }
+        });
+        
+        confirmPasswordInput.addEventListener('input', function() {
+            validateConfirmPassword();
+            updateFormProgress();
+        });
+        
+        passwordToggle.addEventListener('click', togglePasswordVisibility);
+        
+        // Add input event listeners to all required fields for progress tracking
+        const requiredFields = form.querySelectorAll('[required]');
+        requiredFields.forEach(field => {
+            if (field.type === 'radio' || field.type === 'checkbox') {
+                field.addEventListener('change', updateFormProgress);
+            } else {
+                field.addEventListener('input', updateFormProgress);
+            }
+        });
+
+        // Initialize form progress
+        updateFormProgress();
+    </script>
+</body>
+</html>
